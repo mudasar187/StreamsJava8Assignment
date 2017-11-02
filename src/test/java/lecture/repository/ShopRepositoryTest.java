@@ -3,6 +3,8 @@ package lecture.repository;
 import com.visma.lecture.common.domain.Item;
 import com.visma.lecture.common.domain.support.ItemLocation;
 import com.visma.lecture.common.domain.support.ItemType;
+import com.visma.lecture.common.exception.InvalidCriteriaException;
+import com.visma.lecture.common.exception.NoItemFoundForCriteriaException;
 import com.visma.lecture.repository.ShopRepository;
 import lecture.util.ShopTestUtil;
 import org.junit.Before;
@@ -11,6 +13,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -89,19 +92,31 @@ public class ShopRepositoryTest {
         assertEquals(items.size(), shopRepository.getListOfAllItems().size());
     }
 
+
     /**
      * Oppgave 3 test
      */
     @Test
     public void testGetListOfItemsByRange() throws Exception {
 
-        List<Item> listForItemInRange = shopRepository.getListOfItemsByRange(1, 3);
+        List<Item> list = shopRepository.getListOfItemsByRange(1, 3);
 
-        assertEquals(items.get(1), listForItemInRange.get(0));
-        assertEquals(items.get(2), listForItemInRange.get(1));
-        assertEquals(items.get(3), listForItemInRange.get(2));
+        assertEquals(items.get(1), list.get(0));
+        assertEquals(items.get(2), list.get(1));
+        assertEquals(items.get(3), list.get(2));
 
     }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetListOfItemsByRangeWithNegativeInvalidInput() throws Exception {
+        List<Item> list = shopRepository.getListOfItemsByRange(-1, -1);
+    }
+
+    @Test(expected = NoItemFoundForCriteriaException.class)
+    public void testGetListOfItemsByRangeWithEmptyList() throws Exception {
+        List<Item> list = shopRepository.getListOfItemsByRange(0, 0);
+    }
+
 
     /**
      * Oppgave 4 test
@@ -112,6 +127,18 @@ public class ShopRepositoryTest {
         List<Item> itemsFromOslo = shopRepository.getListPerItemPerLocation(ItemLocation.OSLO);
 
         itemsFromOslo.stream().forEach(itemsOslo -> assertEquals(ItemLocation.OSLO, itemsOslo.getItemLocation()));
+    }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetListPerItemPerLocationWithInvalidInput() throws Exception {
+
+        List<Item> itemsFromOslo = shopRepository.getListPerItemPerLocation(null);
+    }
+
+    @Test(expected = NoItemFoundForCriteriaException.class)
+    public void testGetListPerItemPerLocationWithEmptyList() throws Exception {
+
+        List<Item> itemsFromOslo = shopRepository.getListPerItemPerLocation(ItemLocation.DRAMMEN);
     }
 
     /**
@@ -125,6 +152,7 @@ public class ShopRepositoryTest {
         itemsBeverage.stream().forEach(itemType -> assertEquals(ItemType.BEVERAGE, itemType.getItemType()));
     }
 
+
     /**
      * Oppgave 6 test
      */
@@ -134,6 +162,18 @@ public class ShopRepositoryTest {
         List<Item> itemsFromProducer = shopRepository.getListPerItemPerProducer("Producer6 Test6");
 
         assertEquals(1, itemsFromProducer.size());
+    }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetListPerItemPerProducerWithInvalidInput() throws Exception {
+
+        List<Item> itemsFromProducer = shopRepository.getListPerItemPerProducer("");
+    }
+
+    @Test(expected = NoItemFoundForCriteriaException.class)
+    public void testGetListPerItemPerProducerWithEmptyList() throws Exception {
+
+        List<Item> itemsFromProducer = shopRepository.getListPerItemPerProducer("Producer10 Test10");
     }
 
 

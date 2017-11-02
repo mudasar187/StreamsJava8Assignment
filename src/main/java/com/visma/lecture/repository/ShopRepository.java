@@ -7,6 +7,8 @@ import com.visma.lecture.common.domain.support.ItemType;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.visma.lecture.common.Validator.Validator.*;
+
 /**
  * Repository class for shop
  *
@@ -46,7 +48,11 @@ public class ShopRepository {
 	 */
 	public List<Item> getListOfAllItems() {
 
-		return items.stream().collect(Collectors.toList());
+		List<Item> list = items.stream().collect(Collectors.toList());
+
+		validateOutPutList(list);
+
+		return list;
 	}
 
 	/**
@@ -54,10 +60,16 @@ public class ShopRepository {
 	 */
 	public List<Item> getListOfItemsByRange(int fromStart, int toEnd) {
 
-		return items.stream()
+		validateTwoIntegerInput(fromStart, toEnd);
+
+		List<Item> list = items.stream()
 				.skip(fromStart)
 				.limit(toEnd)
 				.collect(Collectors.toList());
+
+		validateOutPutList(list);
+
+		return list;
 	}
 
 	/**
@@ -65,9 +77,15 @@ public class ShopRepository {
 	 */
 	public List<Item> getListPerItemPerLocation(ItemLocation location) {
 
-		return items.stream()
+		validateObjectInput(location);
+
+		List<Item> list = items.stream()
 				.filter(item -> item.getItemLocation().equals(location))
 				.collect(Collectors.toList());
+
+		validateOutPutList(list);
+
+		return list;
 
 	}
 
@@ -76,9 +94,15 @@ public class ShopRepository {
 	 */
 	public List<Item> getListPerItemPerType(ItemType type) {
 
-		return items.stream()
+		validateObjectInput(type);
+
+		List<Item> list = items.stream()
 				.filter(item -> item.getItemType().equals(type))
 				.collect(Collectors.toList());
+
+		validateOutPutList(list);
+
+		return list;
 	}
 
 	/**
@@ -86,9 +110,15 @@ public class ShopRepository {
 	 */
 	public List<Item> getListPerItemPerProducer(String name) {
 
-		return items.stream()
+		validateStringInput(name);
+
+		List<Item> list = items.stream()
 				.filter(item -> item.getItemName().replace("_", " ").contains(name))
 				.collect(Collectors.toList());
+
+		validateOutPutList(list);
+
+		return list;
 	}
 
 
