@@ -55,11 +55,11 @@ public class ShopRepositoryTest {
 
         Integer size = items.size();
         Boolean add = shopRepository.create(
-                new Item(2007, "Producer8 Test8", ItemLocation.SARPSBORG, ItemType.CLOTHING, 1));
+                new Item(2010, "Producer11 Test11", ItemLocation.SARPSBORG, ItemType.CLOTHING, 1));
 
         assertThat(add, is(Boolean.TRUE));
         assertThat(items.size(), is(size + 1)); //replace with .getAll() when implemented
-        assertThat(shopRepository.findItemById(2007).getItemName(), is("Producer8 Test8"));
+        assertThat(shopRepository.findItemById(2010).getItemName(), is("Producer11 Test11"));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class ShopRepositoryTest {
         Boolean remove = shopRepository.delete(2001);
 
         assertThat(remove, is(Boolean.TRUE));
-        assertThat(items.size(), is(5)); //replace with .getAll() when implemented
+        assertThat(items.size(), is(8)); //replace with .getAll() when implemented
         assertThat(shopRepository.findItemById(2001), nullValue());
     }
 
@@ -138,7 +138,7 @@ public class ShopRepositoryTest {
     @Test(expected = NoItemFoundForCriteriaException.class)
     public void testGetListPerItemPerLocationWithEmptyList() throws Exception {
 
-        List<Item> itemsFromOslo = shopRepository.getListPerItemPerLocation(ItemLocation.DRAMMEN);
+        List<Item> itemsFromOslo = shopRepository.getListPerItemPerLocation(ItemLocation.SARPSBORG);
     }
 
     /**

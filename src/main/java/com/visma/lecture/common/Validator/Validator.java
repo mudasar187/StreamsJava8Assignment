@@ -25,27 +25,33 @@ public class Validator {
 
     public static void validateTwoIntegerInput(Integer x, Integer y) {
         if(x == null || y == null || x < 0 || y < 0) {
-            throw new InvalidCriteriaException("Input was null, empty or lower than 0");
+            throw new InvalidCriteriaException("Input was null, empty or lower than 0.");
         }
     }
 
 
     public static void validateObjectInput(Object o) {
         if(o == null) {
-            throw new InvalidCriteriaException("Input was null, empty or lower than 0");
+            throw new InvalidCriteriaException("Input was null, empty or lower than 0.");
         }
     }
 
     public static void validateStringInput(String input) {
         if(input == null || input.isEmpty() || input.equals("")) {
-            throw new InvalidCriteriaException("Input was null, empty or lower than 0");
+            throw new InvalidCriteriaException("Input was null, empty or lower than 0.");
         }
     }
 
 
     public static void validateOneIntegerInput(Integer id)  {
         if(id == null || id < 0) {
-            throw new InvalidCriteriaException("Input was null, empty or lower than 0");
+            throw new InvalidCriteriaException("Input was null, empty or lower than 0.");
+        }
+    }
+
+    public static void validateStringOutPut(String value) {
+        if(value == null || value.isEmpty() || value.equals("")) {
+            throw new NoItemFoundForCriteriaException("No items were found for the given search criteria.");
         }
     }
 

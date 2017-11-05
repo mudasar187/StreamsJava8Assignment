@@ -38,13 +38,6 @@ public class ShopServiceTest {
         shopService = new ShopService(shopRepository);
     }
 
-    @Test
-    public void shouldThrowExceptionOnMissingInput() throws Exception {
-
-        expected.expect(InvalidCriteriaException.class);
-        expected.expectMessage("Input was null, empty or lower than 0.");
-    }
-
     /**
      * Oppgave 1 test
      */
@@ -54,13 +47,16 @@ public class ShopServiceTest {
         Map<ItemLocation, List<Item>> map = shopService.getMapPerLocation();
 
         // Check if its total 2 lists in the map
-        assertEquals(2, map.size());
+        assertEquals(3, map.size());
 
         // Check if its 3 elemts for oslo location
         assertEquals(3, map.get(ItemLocation.OSLO).size());
 
         // Check if its 3 elemts for hamar location
         assertEquals(3, map.get(ItemLocation.HAMAR).size());
+
+        //Check if its 3 elements for drammen location
+        assertEquals(3, map.get(ItemLocation.DRAMMEN).size());
     }
 
 
@@ -76,13 +72,13 @@ public class ShopServiceTest {
         assertEquals(3, map.size());
 
         // Check if its 2 elements for clothing list
-        assertEquals(2, map.get(ItemType.CLOTHING).size());
+        assertEquals(3, map.get(ItemType.CLOTHING).size());
 
         // Check if its 2 elements for beverage list
-        assertEquals(2, map.get(ItemType.BEVERAGE).size());
+        assertEquals(3, map.get(ItemType.BEVERAGE).size());
 
         // Check if its 2 elements for electronic list
-        assertEquals(2, map.get(ItemType.ELECTRONICS).size());
+        assertEquals(3, map.get(ItemType.ELECTRONICS).size());
     }
 
     /**
@@ -94,7 +90,7 @@ public class ShopServiceTest {
         Map<String, List<Item>> map = shopService.getMapPerProducer();
 
         //Check if its total 6 lists in map
-        assertEquals(6, map.size());
+        assertEquals(9, map.size());
 
         // Check if its 1 elements in first list
         assertEquals(1, map.get("Producer1 Test1").size());
@@ -113,6 +109,15 @@ public class ShopServiceTest {
 
         // Check if its 1 elements in sixth list
         assertEquals(1, map.get("Producer6_Test6").size());
+
+        //Check if its 1 element in seventh list
+        assertEquals(1, map.get("Producer7 Test7").size());
+
+        //Check if its 1 element in eight list
+        assertEquals(1, map.get("Producer8 Test8").size());
+
+        //Check if its 1 element in nineth list
+        assertEquals(1, map.get("Producer9 Test9").size());
     }
 
     /**
@@ -124,7 +129,7 @@ public class ShopServiceTest {
         Map<Boolean, List<Item>> map = shopService.getMapOfItemsHasUnder1500InStock();
 
         // Check if its 6 elemnts in first list where all item have stock under 1500
-        assertEquals(6, map.get(true).size());
+        assertEquals(9, map.get(true).size());
 
         // Check if its 0 elements in second list where all item have stock over 1500
         assertEquals(0, map.get(false).size());
@@ -161,4 +166,47 @@ public class ShopServiceTest {
 
         Item item = shopService.findItemByID(-1);
     }
+
+    /**
+     * Oppgave 6 test
+     */
+    @Test
+    public void testGetAllProducersSeperatedByX() throws Exception {
+
+        String item = shopService.getAllProducersSeperatedByX(" ");
+
+        assertEquals(
+                "Producer1 Test1 Producer2 Test2 Producer3 Test3 Producer4 Test4 Producer5 Test5 Producer6_Test6 Producer7 Test7 Producer8 Test8 Producer9 Test9",
+                item);
+    }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetAllProducersSeperatedByXWithInvalidInput() throws Exception {
+
+        String item = shopService.getAllProducersSeperatedByX("");
+    }
+
+    /**
+     * Oppgave 7 test
+     */
+    @Test
+    public void testGetListOfAllLocationsWthMoreThanXInStock() throws Exception {
+
+        List<Item> list = shopService.getListOfAllLocationsWthMoreThanXInStock(0);
+
+        assertEquals(list.size(), 9);
+    }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetListOfAllLocationsWthMoreThanXInStockWithInvalidInput() throws Exception {
+
+        List<Item> list = shopService.getListOfAllLocationsWthMoreThanXInStock(-1);
+    }
+
+    @Test(expected = NoItemFoundForCriteriaException.class)
+    public void testGetListOfAllLocationsWthMoreThanXInStockWithEmptyList() throws Exception {
+
+        List<Item> list = shopService.getListOfAllLocationsWthMoreThanXInStock(10);
+    }
+
 }

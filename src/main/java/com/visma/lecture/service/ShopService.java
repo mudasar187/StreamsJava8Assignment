@@ -21,98 +21,142 @@ import static com.visma.lecture.common.Validator.Validator.*;
  * @author Leo-Andreas Ervik
  */
 public class ShopService {
-	
-	private final ShopRepository shopRepository;
-	
-	public ShopService(ShopRepository shopRepository) {
-		this.shopRepository = shopRepository;
-	}
+
+    private final ShopRepository shopRepository;
+
+    public ShopService(ShopRepository shopRepository) {
+
+        this.shopRepository = shopRepository;
+    }
 
 
-	/**
-	 * Oppgave 1
-	 */
-	public Map<ItemLocation, List<Item>> getMapPerLocation() {
+    /**
+     * Oppgave 1
+     */
+    public Map<ItemLocation, List<Item>> getMapPerLocation() {
 
-		Map<ItemLocation, List<Item>> collect = shopRepository
-				.getListOfAllItems()
-				.stream()
-				.collect(Collectors.groupingBy(Item::getItemLocation));
+        Map<ItemLocation, List<Item>> collect = shopRepository
+                .getListOfAllItems()
+                .stream()
+                .collect(Collectors.groupingBy(Item::getItemLocation));
 
-		validateOutputMap(collect);
+        validateOutputMap(collect);
 
-		return collect;
-	}
+        return collect;
+    }
 
-	/**
-	 * Oppgave 2
-	 */
-	public Map<ItemType, List<Item>> getMapPerType() {
+    /**
+     * Oppgave 2
+     */
+    public Map<ItemType, List<Item>> getMapPerType() {
 
-		Map<ItemType, List<Item>> collect = shopRepository
-		.getListOfAllItems()
-		.stream()
-		.collect(Collectors.groupingBy(Item::getItemType));
+        Map<ItemType, List<Item>> collect = shopRepository
+                .getListOfAllItems()
+                .stream()
+                .collect(Collectors.groupingBy(Item::getItemType));
 
-		validateOutputMap(collect);
+        validateOutputMap(collect);
 
-		return collect;
-	}
+        return collect;
+    }
 
-	/**
-	 * Oppgave 3
-	 */
-	public Map<String, List<Item>> getMapPerProducer() {
-		Map<String, List<Item>> collect = shopRepository
-				.getListOfAllItems()
-				.stream()
-				.collect(Collectors.groupingBy(Item::getItemName));
+    /**
+     * Oppgave 3
+     */
+    public Map<String, List<Item>> getMapPerProducer() {
 
-		validateOutputMap(collect);
+        Map<String, List<Item>> collect = shopRepository
+                .getListOfAllItems()
+                .stream()
+                .collect(Collectors.groupingBy(Item::getItemName));
 
-		return collect;
-	}
+        validateOutputMap(collect);
 
-	/**
-	 * Oppgave 4
-	 */
-	public Map<Boolean, List<Item>> getMapOfItemsHasUnder1500InStock() {
-		Map<Boolean, List<Item>> collect = shopRepository
-				.getListOfAllItems()
-				.stream()
-				.collect(Collectors.partitioningBy(items -> items.getStock() < 1500));
+        return collect;
+    }
 
-		validateOutputMap(collect);
+    /**
+     * Oppgave 4
+     */
+    public Map<Boolean, List<Item>> getMapOfItemsHasUnder1500InStock() {
 
-		return collect;
-	}
+        Map<Boolean, List<Item>> collect = shopRepository
+                .getListOfAllItems()
+                .stream()
+                .collect(Collectors.partitioningBy(items -> items.getStock() < 1500));
 
-	/**
-	 * Oppgave 5
-	 */
-	public Item findItemByID(Integer id) {
+        validateOutputMap(collect);
 
-		validateOneIntegerInput(id);
+        return collect;
+    }
 
-			Item item = shopRepository
-					.getListOfAllItems()
-					.stream()
-					.filter(e -> e.getItemID().equals(id))
-					.findAny()
-					.orElseThrow(() -> new NoItemFoundForCriteriaException("No items were found for the given search criteria."));
+    /**
+     * Oppgave 5
+     */
+    public Item findItemByID(Integer id) {
 
-		return item;
-	}
+        validateOneIntegerInput(id);
 
-	public void something() {
+        Item item = shopRepository
+                .getListOfAllItems()
+                .stream()
+                .filter(e -> e.getItemID().equals(id))
+                .findAny()
+                .orElseThrow(() -> new NoItemFoundForCriteriaException(
+                        "No items were found for the given search criteria."));
 
-		Stream<List<Item>> listPerItemPerLocation = Stream.of(
-				shopRepository.getListPerItemPerLocation(ItemLocation.OSLO),
-				shopRepository.getListPerItemPerLocation(ItemLocation.DRAMMEN),
-				shopRepository.getListPerItemPerLocation(ItemLocation.HAMAR));
+        return item;
+    }
 
-		listPerItemPerLocation.flatMap(Collection::stream);
+    /**
+     * Oppgave 6
+     */
+    public String getAllProducersSeperatedByX(String delimiter) {
+
+        validateStringInput(delimiter);
+
+        String items = shopRepository.getListOfAllItems()
+                .stream()
+                .map(Item::getItemName)
+                .collect(Collectors.joining(delimiter));
+
+        validateStringOutPut(items);
+
+        return items;
+    }
+
+    /**
+     * Oppgave 7
+     */
+    public List<Item> getListOfAllLocationsWthMoreThanXInStock(Integer stock) {
+
+        validateOneIntegerInput(stock);
+
+            List<Item> list = shopRepository.getListOfAllItems()
+                    .stream()
+                    .filter(item -> item.getStock() > stock)
+                    .collect(Collectors.toList());
+
+            validateOutPutList(list);
+
+            return list;
+    }
+
+    /**
+     * Oppgave 8
+     */
 
 
-	}
+
+    public void something() {
+
+        Stream<List<Item>> listPerItemPerLocation = Stream.of(
+                shopRepository.getListPerItemPerLocation(ItemLocation.OSLO),
+                shopRepository.getListPerItemPerLocation(ItemLocation.DRAMMEN),
+                shopRepository.getListPerItemPerLocation(ItemLocation.HAMAR));
+
+        listPerItemPerLocation.flatMap(Collection::stream);
+
+
+    }
 }
