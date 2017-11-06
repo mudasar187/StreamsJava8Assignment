@@ -1,6 +1,7 @@
 package com.visma.lecture.common.Validator;
 
 import com.visma.lecture.common.domain.Item;
+import com.visma.lecture.common.domain.support.ItemLocation;
 import com.visma.lecture.common.exception.InvalidCriteriaException;
 import com.visma.lecture.common.exception.NoItemFoundForCriteriaException;
 
@@ -10,7 +11,7 @@ import java.util.Map;
 public class Validator {
 
 
-    public static void validateOutPutList(List<Item> list) {
+    public static void validateOutPutList(List<?> list) {
         if(list == null || list.isEmpty()) {
             throw new NoItemFoundForCriteriaException("No items were found for the given search criteria.");
         }
@@ -52,6 +53,18 @@ public class Validator {
     public static void validateStringOutPut(String value) {
         if(value == null || value.isEmpty() || value.equals("")) {
             throw new NoItemFoundForCriteriaException("No items were found for the given search criteria.");
+        }
+    }
+
+    public static void validateObjectAndIntegerInput(Object o, Integer stock) {
+        if(o == null || stock == null || stock < 0) {
+            throw new InvalidCriteriaException("Input was null, empty or lower than 0.");
+        }
+    }
+
+    public static void validateStringOneLetterInput(String letter) {
+        if(letter.equals("") || letter.isEmpty() || letter == null || letter.length() == 2) {
+            throw new InvalidCriteriaException("Input was null, empty or lower than 0.");
         }
     }
 

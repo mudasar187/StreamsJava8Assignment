@@ -1,5 +1,6 @@
 package lecture.service;
 
+import com.visma.lecture.common.database.Database;
 import com.visma.lecture.common.domain.Item;
 import com.visma.lecture.common.domain.support.ItemLocation;
 import com.visma.lecture.common.domain.support.ItemType;
@@ -30,12 +31,17 @@ public class ShopServiceTest {
 
     private ShopRepository shopRepository;
     private ShopService shopService;
+    private ShopRepository bigShopRepository;
+    private ShopService bigShopService;
 
     @Before
     public void setUp() throws Exception {
 
         shopRepository = new ShopRepository(new ShopTestUtil().getItems());
         shopService = new ShopService(shopRepository);
+        bigShopRepository = new ShopRepository(Database.itemTable);
+        bigShopService = new ShopService(bigShopRepository);
+
     }
 
     /**
@@ -47,7 +53,7 @@ public class ShopServiceTest {
         Map<ItemLocation, List<Item>> map = shopService.getMapPerLocation();
 
         // Check if its total 2 lists in the map
-        assertEquals(3, map.size());
+        assertEquals(4, map.size());
 
         // Check if its 3 elemts for oslo location
         assertEquals(3, map.get(ItemLocation.OSLO).size());
@@ -57,6 +63,9 @@ public class ShopServiceTest {
 
         //Check if its 3 elements for drammen location
         assertEquals(3, map.get(ItemLocation.DRAMMEN).size());
+
+        //Check if its 1 elemnt for sarpsborg location
+        assertEquals(1, map.get(ItemLocation.SARPSBORG).size());
     }
 
 
@@ -75,7 +84,7 @@ public class ShopServiceTest {
         assertEquals(3, map.get(ItemType.CLOTHING).size());
 
         // Check if its 2 elements for beverage list
-        assertEquals(3, map.get(ItemType.BEVERAGE).size());
+        assertEquals(4, map.get(ItemType.BEVERAGE).size());
 
         // Check if its 2 elements for electronic list
         assertEquals(3, map.get(ItemType.ELECTRONICS).size());
@@ -90,7 +99,7 @@ public class ShopServiceTest {
         Map<String, List<Item>> map = shopService.getMapPerProducer();
 
         //Check if its total 6 lists in map
-        assertEquals(9, map.size());
+        assertEquals(10, map.size());
 
         // Check if its 1 elements in first list
         assertEquals(1, map.get("Producer1 Test1").size());
@@ -129,7 +138,7 @@ public class ShopServiceTest {
         Map<Boolean, List<Item>> map = shopService.getMapOfItemsHasUnder1500InStock();
 
         // Check if its 6 elemnts in first list where all item have stock under 1500
-        assertEquals(9, map.get(true).size());
+        assertEquals(10, map.get(true).size());
 
         // Check if its 0 elements in second list where all item have stock over 1500
         assertEquals(0, map.get(false).size());
@@ -146,7 +155,7 @@ public class ShopServiceTest {
         // Testing by using method getListOfAllItems() in ShopRepository
         // and getting index 0 wich is Item id: 2001, should be the same as the item i recived
         // in method call above shopService.findByItemID(2001)
-        assertEquals(shopRepository.getListOfAllItems().get(0), item);
+        assertEquals(shopRepository.getListOfAllItems().get(1), item);
     }
 
     @Test(expected = NoItemFoundForCriteriaException.class)
@@ -176,7 +185,7 @@ public class ShopServiceTest {
         String item = shopService.getAllProducersSeperatedByX(" ");
 
         assertEquals(
-                "Producer1 Test1 Producer2 Test2 Producer3 Test3 Producer4 Test4 Producer5 Test5 Producer6_Test6 Producer7 Test7 Producer8 Test8 Producer9 Test9",
+                "Producer0 Test0 Producer1 Test1 Producer2 Test2 Producer3 Test3 Producer4 Test4 Producer5 Test5 Producer6_Test6 Producer7 Test7 Producer8 Test8 Producer9 Test9",
                 item);
     }
 
@@ -192,21 +201,175 @@ public class ShopServiceTest {
     @Test
     public void testGetListOfAllLocationsWthMoreThanXInStock() throws Exception {
 
-        List<Item> list = shopService.getListOfAllLocationsWthMoreThanXInStock(0);
+        List<ItemLocation> list = shopService.getListOfAllLocationsWithMoreThanXInStock(1);
 
-        assertEquals(list.size(), 9);
+        System.out.println(list);
+
+        assertEquals(1, list.size());
     }
 
     @Test(expected = InvalidCriteriaException.class)
     public void testGetListOfAllLocationsWthMoreThanXInStockWithInvalidInput() throws Exception {
 
-        List<Item> list = shopService.getListOfAllLocationsWthMoreThanXInStock(-1);
+        List<ItemLocation> list = shopService.getListOfAllLocationsWithMoreThanXInStock(-1);
     }
 
     @Test(expected = NoItemFoundForCriteriaException.class)
     public void testGetListOfAllLocationsWthMoreThanXInStockWithEmptyList() throws Exception {
 
-        List<Item> list = shopService.getListOfAllLocationsWthMoreThanXInStock(10);
+        List<ItemLocation> list = shopService.getListOfAllLocationsWithMoreThanXInStock(10);
     }
 
+    /**
+     * Oppgave 8 test
+     */
+    @Test
+    public void testGetListOfAllLocationsWithLessThenXInStock() throws Exception {
+
+        List<ItemLocation> list = shopService.getListOfAllLocationsWithLessThanXInStock(2);
+
+        assertEquals(3, list.size());
+    }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetListOfAllLocationsWithLessThenXInStockWithInvalidInput() throws Exception {
+
+        List<ItemLocation> list = shopService.getListOfAllLocationsWithLessThanXInStock(-1);
+    }
+
+    @Test(expected = NoItemFoundForCriteriaException.class)
+    public void testGetListOfAllLocationsWithLessThenXInStockWithEmpty() throws Exception {
+
+        List<ItemLocation> list = shopService.getListOfAllLocationsWithLessThanXInStock(0);
+    }
+
+    /**
+     * Oppgave 9 test
+     */
+    @Test
+    public void testGetListOfLocationXWithMoreThanYInStock() throws Exception {
+
+        List<Item> list = shopService.getListOfLocationXWithMoreThanYInStock(ItemLocation.OSLO, 0);
+
+        assertEquals(3, list.size());
+    }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetListOfLocationXWithMoreThanYInStockWithInvalidInput() throws Exception {
+
+        List<Item> list = shopService.getListOfLocationXWithMoreThanYInStock(null, -1);
+    }
+
+    @Test(expected = NoItemFoundForCriteriaException.class)
+    public void testGetListOfLocationXWithMoreThanYInStockWithEmptyList() throws Exception {
+
+        List<Item> list = shopService.getListOfLocationXWithMoreThanYInStock(ItemLocation.SARPSBORG, 0);
+
+    }
+
+    /**
+     * Oppgave 10 test
+     */
+    @Test
+    public void testGetListOfLocationXWithLessThanYInStock() throws Exception{
+
+        List<Item> list = shopService.getListOfLocationXWithLessThanYInStock(ItemLocation.DRAMMEN, 4);
+
+        assertEquals(1, list.size());
+    }
+
+    @Test(expected = NoItemFoundForCriteriaException.class)
+    public void testGetListOfLocationXWithLessThanYInStockWithEmptyList() throws Exception {
+
+        List<Item> list = shopService.getListOfLocationXWithLessThanYInStock(ItemLocation.DRAMMEN, 3);
+    }
+
+    @Test
+    public void testGetListofAllItemsWithNameStartWithX() throws Exception {
+
+        List<Item> list = bigShopService.getListofAllItemsWithNameStartWithX("B");
+
+        assertEquals(9, list.size());
+    }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetListofAllItemsWithNameStartWithXWithInvalidInput() throws Exception {
+
+        List<Item> list = bigShopService.getListofAllItemsWithNameStartWithX("BA");
+
+    }
+
+    @Test(expected = NoItemFoundForCriteriaException.class)
+    public void testGetListofAllItemsWithNameStartWithXWithEmptyList() throws Exception {
+
+        List<Item> list = bigShopService.getListofAllItemsWithNameStartWithX("W");
+
+    }
+
+    /**
+     * Oppgave 12 test
+     */
+    @Test
+    public void testGetAverageOfItemStockInLocationX() throws Exception {
+
+        double result = shopService.getAverageItemStockInLocationX(ItemLocation.DRAMMEN);
+
+        assertEquals(4.0, result);
+    }
+
+    /**
+     * Oppgave 13 test
+     */
+    @Test
+    public void testgetItemWithMostInStock() throws Exception {
+
+        Item item = shopService.getItemWithMostInStock();
+
+        assertEquals(item, shopRepository.getListOfAllItems().get(8));
+    }
+
+    /**
+     * Oppgave 14 test
+     */
+    @Test
+    public void testGetItemWithMostLessInStock() throws Exception {
+
+        Item item = shopService.getItemWithMostLessInStock();
+
+        assertEquals(item, shopRepository.getListOfAllItems().get(0));
+    }
+
+    /**
+     * Oppgave 15 test
+     */
+
+    /**
+     * Oppgave 16 test
+     */
+
+    /**
+     * Oppgave 19 test
+     */
+    @Test
+    public void testGetListWithoutDuplicates() throws Exception {
+
+        List<Item> distinctElements = bigShopService.getAllItemsWithoutDuplicates();
+
+        assertEquals(75, distinctElements.size());
+    }
+
+    /**
+     * Oppgave 20 test
+     */
+
+    /**
+     * Oppgave 21 test
+     */
+    @Test
+    public void testGetSumOfAllItemsStock() throws Exception {
+
+        int result = shopService.sumAllStockInList();
+
+        assertEquals(18, result);
+    }
 }

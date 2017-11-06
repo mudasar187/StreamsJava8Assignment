@@ -41,7 +41,7 @@ public class ShopRepositoryTest {
     @Test
     public void findItemById() throws Exception {
 
-        assertThat(shopRepository.findItemById(2001), is(items.get(0)));
+        assertThat(shopRepository.findItemById(2001), is(items.get(1)));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class ShopRepositoryTest {
         Boolean remove = shopRepository.delete(2001);
 
         assertThat(remove, is(Boolean.TRUE));
-        assertThat(items.size(), is(8)); //replace with .getAll() when implemented
+        assertThat(items.size(), is(9)); //replace with .getAll() when implemented
         assertThat(shopRepository.findItemById(2001), nullValue());
     }
 
@@ -138,7 +138,7 @@ public class ShopRepositoryTest {
     @Test(expected = NoItemFoundForCriteriaException.class)
     public void testGetListPerItemPerLocationWithEmptyList() throws Exception {
 
-        List<Item> itemsFromOslo = shopRepository.getListPerItemPerLocation(ItemLocation.SARPSBORG);
+        List<Item> itemsFromOslo = shopRepository.getListPerItemPerLocation(ItemLocation.LILLEHAMMER);
     }
 
     /**

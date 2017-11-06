@@ -100,6 +100,8 @@ public class Database {
 		itemTable.add(new Item(73, "JACK_DANIELS WHISKEY", ItemLocation.HAMAR, ItemType.BEVERAGE, 5518));
 		itemTable.add(new Item(74, "CAPTAIN_MORGAN RUM", ItemLocation.HAMAR, ItemType.BEVERAGE, 2085));
 		itemTable.add(new Item(75, "BOMBAY_SAPPHIRE GIN", ItemLocation.HAMAR, ItemType.BEVERAGE, 9208));
+		itemTable.add(new Item(75, "BOMBAY_SAPPHIRE GIN", ItemLocation.HAMAR, ItemType.BEVERAGE, 9208));
+
 	}
 	
 }

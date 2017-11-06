@@ -13,6 +13,7 @@ public class ShopTestUtil {
 	
 	public ShopTestUtil(){
 		items = new ArrayList<>();
+		items.add(new Item(2000, "Producer0 Test0", ItemLocation.SARPSBORG, ItemType.BEVERAGE, 0));
 		items.add(new Item(2001, "Producer1 Test1", ItemLocation.OSLO, ItemType.BEVERAGE, 1));
 		items.add(new Item(2002, "Producer2 Test2", ItemLocation.OSLO, ItemType.ELECTRONICS, 1));
 		items.add(new Item(2003, "Producer3 Test3", ItemLocation.OSLO, ItemType.CLOTHING, 1));
