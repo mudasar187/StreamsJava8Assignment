@@ -205,7 +205,7 @@ public class ShopService {
 
         List<Item> list = shopRepository.getListOfAllItems()
                 .stream()
-                .filter(item -> item.getItemName().startsWith(letter))
+                .filter(item -> item.getItemName().substring(item.getItemName().indexOf(" ")+1).startsWith(letter))
                 .collect(toList());
 
         validateOutPutList(list);
@@ -258,10 +258,53 @@ public class ShopService {
     /**
      * Oppgave 15
      */
+    public Map<ItemLocation, List<Item>> getAllItemsForALocationXHaveMoreThanYInStock(int stock) {
+
+        validateOneIntegerInput(stock);
+
+        Map<ItemLocation, List<Item>> map = shopRepository.getListOfAllItems()
+                .stream()
+                .filter(item -> item.getStock() > stock)
+                .collect(Collectors.groupingBy(Item::getItemLocation));
+
+        validateOutputMap(map);
+
+        return map;
+    }
 
     /**
      * Oppgave 16
      */
+    public List<Item> getAllItemsSortedAlphabeticallyByProducer() {
+
+        List<Item> list = shopRepository.getListOfAllItems()
+                .stream()
+                .sorted(Comparator.comparing(Item::getItemName))
+                .collect(Collectors.toList());
+
+        validateOutPutList(list);
+
+        return list;
+    }
+
+    /**
+     * Oppgave 17
+     */
+
+    /**
+     * Oppgave 18
+     */
+    public List<Item> getAllItemsSortedByStockFromHighToLow() {
+
+        List<Item> list = shopRepository.getListOfAllItems()
+                .stream()
+                .sorted(Comparator.comparing(Item::getStock).reversed())
+                .collect(Collectors.toList());
+
+        validateOutPutList(list);
+
+        return list;
+    }
 
     /**
      * Oppgave 19
@@ -279,9 +322,25 @@ public class ShopService {
     /**
      * Oppgave 20
      */
+    public List<Item> getASingleListFromToLists(int a, int b, int x, int y) {
+
+        validateFourIntegerInput(a,b,x,y);
+
+        List<Item> list = Stream.of(shopRepository.getListOfItemsByRange(a,b), shopRepository.getListOfItemsByRange(x,y))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        validateOutPutList(list);
+
+        return list;
+    }
 
     /**
      * Oppgave 21
+     */
+
+    /**
+     * Oppgave 22
      */
     public int sumAllStockInList() {
 
@@ -289,17 +348,5 @@ public class ShopService {
                 .stream().mapToInt(Item::getStock).sum();
 
         return result;
-    }
-
-    public void something() {
-
-        Stream<List<Item>> listPerItemPerLocation = Stream.of(
-                shopRepository.getListPerItemPerLocation(ItemLocation.OSLO),
-                shopRepository.getListPerItemPerLocation(ItemLocation.DRAMMEN),
-                shopRepository.getListPerItemPerLocation(ItemLocation.HAMAR));
-
-        listPerItemPerLocation.flatMap(Collection::stream);
-
-
     }
 }

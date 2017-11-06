@@ -24,6 +24,12 @@ public class Validator {
         }
     }
 
+    public static void validateIntegerAndListInput(Integer stock, List<?> list) {
+        if(stock == null || stock < 0 || list.isEmpty() || list == null) {
+            throw new InvalidCriteriaException("Input was null, empty og lower than 0");
+        }
+    }
+
     public static void validateTwoIntegerInput(Integer x, Integer y) {
         if(x == null || y == null || x < 0 || y < 0) {
             throw new InvalidCriteriaException("Input was null, empty or lower than 0.");
@@ -64,6 +70,12 @@ public class Validator {
 
     public static void validateStringOneLetterInput(String letter) {
         if(letter.equals("") || letter.isEmpty() || letter == null || letter.length() == 2) {
+            throw new InvalidCriteriaException("Input was null, empty or lower than 0.");
+        }
+    }
+
+    public static void validateFourIntegerInput(Integer a, Integer b, Integer c, Integer d) {
+        if(a == null || a < 0 || b == null || b < 0 || c == null || c < 0 || d == null || d < 0) {
             throw new InvalidCriteriaException("Input was null, empty or lower than 0.");
         }
     }

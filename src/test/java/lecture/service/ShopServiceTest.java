@@ -284,12 +284,18 @@ public class ShopServiceTest {
         List<Item> list = shopService.getListOfLocationXWithLessThanYInStock(ItemLocation.DRAMMEN, 3);
     }
 
+
+    /**
+     * Oppgave 11 test
+     */
     @Test
     public void testGetListofAllItemsWithNameStartWithX() throws Exception {
 
         List<Item> list = bigShopService.getListofAllItemsWithNameStartWithX("B");
 
-        assertEquals(9, list.size());
+        System.out.println(list);
+
+        assertEquals(2, list.size());
     }
 
     @Test(expected = InvalidCriteriaException.class)
@@ -302,7 +308,7 @@ public class ShopServiceTest {
     @Test(expected = NoItemFoundForCriteriaException.class)
     public void testGetListofAllItemsWithNameStartWithXWithEmptyList() throws Exception {
 
-        List<Item> list = bigShopService.getListofAllItemsWithNameStartWithX("W");
+        List<Item> list = bigShopService.getListofAllItemsWithNameStartWithX("X");
 
     }
 
@@ -342,10 +348,61 @@ public class ShopServiceTest {
     /**
      * Oppgave 15 test
      */
+    @Test
+    public void testGetAllItemsForALocationXHaveMoreThanYInStock() throws Exception {
+
+        Map<ItemLocation, List<Item>> map = shopService.getAllItemsForALocationXHaveMoreThanYInStock(0);
+
+        assertEquals(3, map.size());
+    }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetAllItemsForALocationXHaveMoreThanYInStockWithInvalidInput() throws Exception {
+
+        Map<ItemLocation, List<Item>> map = shopService.getAllItemsForALocationXHaveMoreThanYInStock(-1);
+
+    }
+
+    @Test(expected = NoItemFoundForCriteriaException.class)
+    public void testGetAllItemsForALocationXHaveMoreThanYInStockWithEmptyList() throws Exception {
+
+        Map<ItemLocation, List<Item>> map = shopService.getAllItemsForALocationXHaveMoreThanYInStock(20);
+
+    }
 
     /**
      * Oppgave 16 test
      */
+    @Test
+    public void testGetAllItemsSortedAlphabeticallyByProducer() throws Exception {
+
+        List<Item> list = bigShopService.getAllItemsSortedAlphabeticallyByProducer();
+
+        // Test that index 0 and 1 in list is equals to index 1 and 16 in bigShopRepository list
+        assertEquals(list.get(0), bigShopRepository.getListOfAllItems().get(1));
+        assertEquals(list.get(1), bigShopRepository.getListOfAllItems().get(16));
+
+    }
+
+    /**
+     * Oppgave 17 test
+     */
+
+    /**
+     * Oppgave 18 test
+     */
+    @Test
+    public void testGetAllItemsSortedByStockFromHighToLow() throws Exception {
+
+        List<Item> list = shopService.getAllItemsSortedByStockFromHighToLow();
+
+        System.out.println(list);
+
+        // Testing with 3 elemnts
+        assertEquals(list.get(0), shopRepository.getListOfAllItems().get(8));
+        assertEquals(list.get(1), shopRepository.getListOfAllItems().get(9));
+        assertEquals(list.get(2), shopRepository.getListOfAllItems().get(7));
+    }
 
     /**
      * Oppgave 19 test
@@ -361,6 +418,28 @@ public class ShopServiceTest {
     /**
      * Oppgave 20 test
      */
+    @Test
+    public void testGetASingeListFromTwoListsWithRange() throws Exception {
+
+        List<Item> list = shopService.getASingleListFromToLists(0,1, 8,9);
+
+        assertEquals(list.get(0), shopRepository.getListOfAllItems().get(0));
+        assertEquals(list.get(1), shopRepository.getListOfAllItems().get(8));
+        assertEquals(list.get(2), shopRepository.getListOfAllItems().get(9));
+    }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetASingeListFromTwoListsWithRangeWithInvalidInput() throws Exception{
+
+        List<Item> list = shopService.getASingleListFromToLists(-1,2, -1,9);
+    }
+
+    @Test(expected = NoItemFoundForCriteriaException.class)
+    public void testGetASingeListFromTwoListsWithRangeWithEmptyList() throws Exception {
+
+        List<Item> list = shopService.getASingleListFromToLists(10,12, 15,20);
+
+    }
 
     /**
      * Oppgave 21 test
