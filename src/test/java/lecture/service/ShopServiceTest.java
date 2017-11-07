@@ -203,7 +203,6 @@ public class ShopServiceTest {
 
         List<ItemLocation> list = shopService.getListOfAllLocationsWithMoreThanXInStock(1);
 
-        System.out.println(list);
 
         assertEquals(1, list.size());
     }
@@ -293,7 +292,6 @@ public class ShopServiceTest {
 
         List<Item> list = bigShopService.getListofAllItemsWithNameStartWithX("B");
 
-        System.out.println(list);
 
         assertEquals(2, list.size());
     }
@@ -354,6 +352,7 @@ public class ShopServiceTest {
         Map<ItemLocation, List<Item>> map = shopService.getAllItemsForALocationXHaveMoreThanYInStock(0);
 
         assertEquals(3, map.size());
+
     }
 
     @Test(expected = InvalidCriteriaException.class)
@@ -387,6 +386,13 @@ public class ShopServiceTest {
     /**
      * Oppgave 17 test
      */
+    @Test
+    public void testGetAllItemsSortedAplhabeticallyByName() {
+
+        List<Item> list = bigShopService.getAllItemsSortedAplhabeticallyByName();
+
+        assertEquals(list.get(0), bigShopRepository.getListOfAllItems().get(48));
+    }
 
     /**
      * Oppgave 18 test
@@ -395,8 +401,6 @@ public class ShopServiceTest {
     public void testGetAllItemsSortedByStockFromHighToLow() throws Exception {
 
         List<Item> list = shopService.getAllItemsSortedByStockFromHighToLow();
-
-        System.out.println(list);
 
         // Testing with 3 elemnts
         assertEquals(list.get(0), shopRepository.getListOfAllItems().get(8));
@@ -443,6 +447,24 @@ public class ShopServiceTest {
 
     /**
      * Oppgave 21 test
+     */
+    @Test
+    public void testGetASingeListFromThreeLists() throws Exception {
+
+        List<Item> list = shopService.getASingeListFromThreeLists(ItemLocation.OSLO, ItemType.ELECTRONICS, "Producer0");
+
+        assertEquals(6, list.size());
+
+    }
+
+    @Test(expected = InvalidCriteriaException.class)
+    public void testGetASingeListFromThreeListsWithInvalidInput() throws Exception {
+
+        List<Item> list = shopService.getASingeListFromThreeLists(null, null, "Producerrr");
+    }
+
+    /**
+     * Oppgave 22 test
      */
     @Test
     public void testGetSumOfAllItemsStock() throws Exception {

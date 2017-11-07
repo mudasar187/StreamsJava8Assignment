@@ -290,6 +290,18 @@ public class ShopService {
     /**
      * Oppgave 17
      */
+    public List<Item> getAllItemsSortedAplhabeticallyByName() {
+
+        List<Item> list = shopRepository.getListOfAllItems()
+                .stream()
+                .sorted(Comparator.comparing(item -> item.getItemName().substring(item.getItemName().indexOf(" "))))
+                .collect(Collectors.toList());
+
+        validateOutPutList(list);
+
+        return list;
+    }
+
 
     /**
      * Oppgave 18
@@ -338,6 +350,21 @@ public class ShopService {
     /**
      * Oppgave 21
      */
+    public List<Item> getASingeListFromThreeLists(ItemLocation location, ItemType type, String producer) {
+
+        validateTwoObjectAndOneStringInput(location, type, producer);
+
+        List<Item> list = Stream.of(shopRepository.getListPerItemPerLocation(location),
+                shopRepository.getListPerItemPerType(type),
+                shopRepository.getListPerItemPerProducer(producer))
+                .flatMap(List::stream)
+                .distinct()
+                .collect(Collectors.toList());
+
+        validateOutPutList(list);
+
+        return list;
+    }
 
     /**
      * Oppgave 22

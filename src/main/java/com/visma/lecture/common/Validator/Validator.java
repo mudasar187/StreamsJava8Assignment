@@ -80,4 +80,10 @@ public class Validator {
         }
     }
 
+    public static void validateTwoObjectAndOneStringInput(Object a, Object b, String c) {
+        if(a == null || b == null || c.isEmpty() || c.equals("")) {
+            throw new InvalidCriteriaException("Input was null, empty or lower than 0.");
+        }
+    }
+
 }
