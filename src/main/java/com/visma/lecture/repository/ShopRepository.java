@@ -113,7 +113,7 @@ public class ShopRepository {
 		validateStringInput(name);
 
 		List<Item> list = items.stream()
-				.filter(item -> item.getItemName().replace("_", " ").contains(name))
+				.filter(item -> item.getItemName().replace("_", " ").toLowerCase().contains(name.toLowerCase()))
 				.collect(Collectors.toList());
 
 		validateOutPutList(list);

@@ -159,7 +159,7 @@ public class ShopRepositoryTest {
     @Test
     public void testGetListPerItemPerProducer() throws Exception {
 
-        List<Item> itemsFromProducer = shopRepository.getListPerItemPerProducer("Producer6 Test6");
+        List<Item> itemsFromProducer = shopRepository.getListPerItemPerProducer("producer6");
 
         assertEquals(1, itemsFromProducer.size());
     }
