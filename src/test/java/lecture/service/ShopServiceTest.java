@@ -96,37 +96,9 @@ public class ShopServiceTest {
     @Test
     public void testGetMapPerProducer() throws Exception {
 
-        Map<String, List<Item>> map = shopService.getMapPerProducer();
+        Map<String, List<Item>> map = bigShopService.getMapPerProducer();
 
-        //Check if its total 6 lists in map
-        assertEquals(10, map.size());
-
-        // Check if its 1 elements in first list
-        assertEquals(1, map.get("Producer1 Test1").size());
-
-        // Check if its 1 elements in second list
-        assertEquals(1, map.get("Producer2 Test2").size());
-
-        // Check if its 1 elements in third list
-        assertEquals(1, map.get("Producer3 Test3").size());
-
-        // Check if its 1 elements in fourth list
-        assertEquals(1, map.get("Producer4 Test4").size());
-
-        // Check if its 1 elements in fifth list
-        assertEquals(1, map.get("Producer5 Test5").size());
-
-        // Check if its 1 elements in sixth list
-        assertEquals(1, map.get("Producer6_Test6").size());
-
-        //Check if its 1 element in seventh list
-        assertEquals(1, map.get("Producer7 Test7").size());
-
-        //Check if its 1 element in eight list
-        assertEquals(1, map.get("Producer8 Test8").size());
-
-        //Check if its 1 element in nineth list
-        assertEquals(1, map.get("Producer9 Test9").size());
+        assertEquals(32, map.size());
     }
 
     /**

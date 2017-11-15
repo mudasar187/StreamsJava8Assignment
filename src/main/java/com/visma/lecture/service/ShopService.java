@@ -64,10 +64,10 @@ public class ShopService {
      */
     public Map<String, List<Item>> getMapPerProducer() {
 
-        Map<String, List<Item>> collect = shopRepository
-                .getListOfAllItems()
+        Map<String, List<Item>> collect = shopRepository.getListOfAllItems()
                 .stream()
-                .collect(Collectors.groupingBy(Item::getItemName));
+                .collect(Collectors.groupingBy(e -> e.getItemName()
+                        .substring(0, e.getItemName().indexOf(" "))));
 
         validateOutputMap(collect);
 
