@@ -9,7 +9,6 @@ import com.visma.lecture.common.exception.NoItemFoundForCriteriaException;
 import com.visma.lecture.repository.ShopRepository;
 import com.visma.lecture.service.ShopService;
 import lecture.util.ShopTestUtil;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,12 +16,8 @@ import org.junit.rules.ExpectedException;
 
 import java.util.List;
 import java.util.Map;
-
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertSame;
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.format;
+
 
 public class ShopServiceTest {
 
