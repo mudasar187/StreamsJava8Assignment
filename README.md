@@ -1,6 +1,8 @@
 ## Advanced Java PGR200
 
-This was part of the exam in PGR200
+## Exam Fall 2017
+
+## Java 8 Streams
 
 ### Task from Visma ###
 
