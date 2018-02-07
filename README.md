@@ -1,3 +1,7 @@
+## Exam Project
+
+This was part of the exam in PGR200
+
 ### Task from Visma ###
 
 Open the _Solution Description_ located under main/resources. The aim here is to 
